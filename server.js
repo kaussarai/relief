@@ -21,8 +21,9 @@ app.post('/', (req, res) => {
     res.json({ answer: reply });
 });
 
-// Слушаем порт, который дает Render
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Сервер работает на порту ${PORT}`);
+// Вместо фиксированного 3000 используем переменную окружения
+const port = process.env.PORT || 10000; 
+
+server.listen(port, "0.0.0.0", () => {
+    console.log(`Сервер запущен и слушает порт ${port}`);
 });
