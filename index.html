@@ -116,10 +116,11 @@
         <div id="response">Здесь будет наш разговор...</div>
     </div>
 
-    <script>
-        async function askAI() {
+<script>
+    async function askAI() {
         const text = document.getElementById('userInput').value;
         const responseDiv = document.getElementById('response');
+        
         if (!text) {
             responseDiv.innerText = "Пожалуйста, поделись своими мыслями...";
             return;
@@ -128,22 +129,23 @@
         responseDiv.innerHTML = "<i>Chat Relief нежно обдумывает твои слова...</i>";
 
         try {
-            // Посылаем запрос на твой сервер в терминале
-            const response = await fetch('http://localhost:3000', {
+            // Теперь мы стучимся не на localhost, а на твой живой сервер в Render
+            const response = await fetch('https://relief-chat.onrender.com', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: text })
             });
 
             const data = await response.json();
-        
+            
             // Показываем ответ от сервера
             responseDiv.innerHTML = "<b>Chat Relief:</b><br>" + data.answer;
         } catch (error) {
-          responseDiv.innerHTML = "<b>Ошибка:</b> Похоже, сервер в терминале не запущен. Проверь черное окошко!";
+            // Если сервер на Render долго "просыпается" или есть проблема с сетью
+            responseDiv.innerHTML = "<b>Ошибка:</b> Не удалось связаться с сервером. Попробуй еще раз через 30 секунд, ИИ нужно время, чтобы проснуться!";
+            console.error("Ошибка запроса:", error);
+        }
     }
-}
-    </script>
-
+</script>
 </body>
 </html>
